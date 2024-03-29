@@ -1,5 +1,4 @@
 #include "../headers/dmm.hpp"
-#include <iostream>
 
 void* operator_new(size_t size) {
     void* ptr = std::malloc(size);
@@ -41,8 +40,6 @@ template <typename T>
 void Delete(T* ptr) {
     if (ptr) {
         ::operator_delete(ptr);
-
-        T::~T(ptr);
     }
 }
 
@@ -62,7 +59,7 @@ template <typename T>
 void Delete_array(T* ptr, size_t size) {
     if (ptr) {
         for (size_t i = size - 1; i != -1; --i) {
-            T::~T(ptr + i);
+            (ptr + i)->~T();
         }
         ::operator_delete(ptr);
     }

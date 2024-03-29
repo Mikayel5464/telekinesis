@@ -1,5 +1,5 @@
-#include "../headers/dmm.hpp"
 #include <iostream>
+#include "../headers/dmm.hpp"
 
 int main() {
 
