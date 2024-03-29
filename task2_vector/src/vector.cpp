@@ -1,7 +1,6 @@
 #ifndef VECTOR__CPP__
 #define VECTOR__CPP__
 
-#include <iostream>
 #include <stdexcept>
 #include "../headers/vector.hpp"
 
@@ -9,17 +8,17 @@ template <typename T>
 Vector<T>::Vector(): m_size(1), m_cap(5), m_arr(new T[m_cap]) {}
 
 template <typename T>
-Vector<T>::Vector(size_t size)
+Vector<T>::Vector(type_of_size size)
     : m_size(size)
     , m_cap(m_size * 2)
-    , m_arr(new T[m_cap])
+    , m_arr(new val_type[m_cap])
 {}
 
 template <typename T>
-Vector<T>::Vector(size_t size, const T& val) {
+Vector<T>::Vector(type_of_size size, const val_type& val) {
     this->m_size = size;
     this->m_cap = m_size * 2;
-    this->m_arr = new T[m_cap];
+    this->m_arr = new val_type[m_cap];
 
     for (size_t i = 0; i < m_size; ++i) {
         this->m_arr[i] = val;
@@ -30,7 +29,7 @@ template <typename T>
 Vector<T>::Vector(const Vector& rhv) {
     this->m_size = rhv.m_size;
     this->m_cap = rhv.m_cap;
-    this->m_arr = new T[rhv.m_cap];
+    this->m_arr = new val_type[rhv.m_cap];
 
     for (size_t i = 0; i < m_size; ++i) {
         this->m_arr[i] = rhv.m_arr[i];
@@ -43,7 +42,7 @@ const Vector<T>& Vector<T>::operator=(const Vector& rhv) {
         clear();
         this->m_size = rhv.m_size;
         this->m_cap = rhv.m_cap;
-        this->m_arr = new T[rhv.m_cap];
+        this->m_arr = new val_type[rhv.m_cap];
 
         for (size_t i = 0; i < m_size; ++i) {
             this->m_arr[i] = rhv.m_arr[i];
@@ -59,11 +58,11 @@ Vector<T>::~Vector() {
 }
 
 template <typename T>
-void Vector<T>::recap(size_t new_cap) {
+void Vector<T>::recap(type_of_size new_cap) {
     if (new_cap > m_cap) {
-        T* new_arr = new T[new_cap];
+        pointer new_arr = new val_type[new_cap];
 
-        for (size_t i = 0; i < m_size; ++i) {
+        for (type_of_size i = 0; i < m_size; ++i) {
             new_arr[i] = m_arr[i];
         }
 
@@ -74,17 +73,17 @@ void Vector<T>::recap(size_t new_cap) {
 }
 
 template <typename T>
-void Vector<T>::init(size_t size) {
-    m_arr = new T[size];
+void Vector<T>::init(type_of_size size) {
+    m_arr = new val_type[size];
     m_size = size;
     m_cap = size;
 }
 
 template <typename T>
-void Vector<T>::init(size_t size, const T& val) {
+void Vector<T>::init(type_of_size size, const_referance val) {
     init(size);
 
-    for (size_t i = 0; i < size; ++i) {
+    for (type_of_size i = 0; i < size; ++i) {
         m_arr[i] = val;
     }
 }
@@ -98,7 +97,7 @@ void Vector<T>::clear() {
 }
 
 template <typename T>
-void Vector<T>::resize(size_t size, const T& val) {
+void Vector<T>::resize(type_of_size size, const_referance val) {
     if (size < m_size) {
         m_size = size;
     }
@@ -107,7 +106,7 @@ void Vector<T>::resize(size_t size, const T& val) {
             recap(size);
         }
         
-        for (size_t i = m_size; i < m_size; ++i) {
+        for (type_of_size i = m_size; i < m_size; ++i) {
                 m_arr[i] = val;
         }
 
@@ -116,7 +115,7 @@ void Vector<T>::resize(size_t size, const T& val) {
 }
 
 template <typename T>
-void Vector<T>::push_back(const T& val) {
+void Vector<T>::push_back(const_referance val) {
     if (m_size == m_cap) {
         recap(2 * m_size);
     }
@@ -133,13 +132,13 @@ void Vector<T>::pop_back() {
 }
 
 template <typename T>
-void Vector<T>::insert(size_t index, const T& val) {
+void Vector<T>::insert(type_of_size index, const_referance val) {
     if (index <= m_size) {
         if (m_size == m_cap) {
             recap(2 * m_size);
         }
 
-        for (size_t i = m_size; i > index; --i) {
+        for (type_of_size i = m_size; i > index; --i) {
             m_arr[i] = m_arr[i - 1];
         }
 
@@ -149,9 +148,9 @@ void Vector<T>::insert(size_t index, const T& val) {
 }
 
 template <typename T>
-void Vector<T>::erase(size_t index) {
+void Vector<T>::erase(type_of_size index) {
     if (index < m_size) {
-        for (size_t i = index; i < m_size - 1; ++i) {
+        for (type_of_size i = index; i < m_size - 1; ++i) {
             m_arr[i] = m_arr[i + 1];
         }
 
@@ -160,7 +159,8 @@ void Vector<T>::erase(size_t index) {
 }
 
 template <typename T>
-T& Vector<T>::at(size_t index) {
+typename Vector<T>::referance
+Vector<T>::at(type_of_size index) {
     if (index >= m_size) {
         throw std::out_of_range("Index is out of range!");
     }
@@ -179,22 +179,26 @@ bool Vector<T>::empty() {
 }
 
 template <typename T>
-T& Vector<T>::front() {
+typename Vector<T>::referance
+Vector<T>::front() {
     return m_arr[0];
 }
 
 template <typename T>
-T& Vector<T>::back() {
+typename Vector<T>::referance
+Vector<T>::back() {
     return m_arr[m_size - 1];
 }
 
 template <typename T>
-size_t Vector<T>::size() {
+typename Vector<T>::type_of_size
+Vector<T>::size() {
     return m_size;
 }
 
 template <typename T>
-size_t Vector<T>::capacity() {
+typename Vector<T>::type_of_size
+Vector<T>::capacity() {
     return m_cap;
 }
 
